@@ -87,3 +87,17 @@ void vga_print_str(uint8_t* str, int col, int row) {
         str++;
     }
 }
+
+void vga_clear_row(int row) {
+    for (int col = 0; col < VGA_TEXT_MODE_MAX_COLS; col++) {
+        vga_print_char(' ', col, row, VGA_COLOR_WHITE_ON_BLACK);
+    }
+}
+
+void vga_clear_screen(void) {
+    for (int row = 0; row < VGA_TEXT_MODE_MAX_ROWS; row++) {
+        vga_clear_row(row);
+    }
+
+    vga_set_cursor(vga_get_mem_offset(0,0));
+}
