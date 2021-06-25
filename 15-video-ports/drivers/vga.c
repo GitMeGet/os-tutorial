@@ -1,5 +1,6 @@
-#include "vga.h"
 #include "ports.h"
+#include "../kernel/util.h"
+#include "vga.h"
 
 #include <stdint.h>
 
@@ -37,6 +38,26 @@ void vga_set_cursor(uint16_t offset) {
 
 static
 uint16_t vga_handle_scrolling(uint16_t offset) {
+    /* If the offset is within screen, don't modify */
+    if (offset < vga_get_mem_offset(VGA_TEXT_MODE_MAX_COLS,
+                                    VGA_TEXT_MODE_MAX_ROWS)) {
+        return offset;
+    }
+
+    /* TODO: handle scrolling back more than one row */
+    /* Shift rows back by one */
+    for (int i = 1; i < VGA_TEXT_MODE_MAX_ROWS; i++) {
+        memory_copy((uint8_t*) (vga_get_mem_offset(0, i) + VGA_START_ADDR),
+                    (uint8_t*) (vga_get_mem_offset(0, i-1) + VGA_START_ADDR),
+                    VGA_TEXT_MODE_MAX_COLS*2);
+    }
+
+    /* Blank last row */
+    vga_clear_row(VGA_TEXT_MODE_MAX_ROWS);
+
+    /* Move cursor back to start of row */
+    offset = vga_get_mem_offset(0, VGA_TEXT_MODE_MAX_ROWS);
+
     return offset;
 }
 
