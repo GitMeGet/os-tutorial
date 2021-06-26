@@ -3,6 +3,8 @@
 #define VGA_START_ADDR           0xb8000
 #define VGA_TEXT_MODE_MAX_ROWS   25
 #define VGA_TEXT_MODE_MAX_COLS   80
+/* Character cell consists of character byte and attribute byte */
+#define VGA_CHAR_CELL_NUM_BYTES  2
 #define VGA_COLOR_WHITE_ON_BLACK 0x0f
 
 #define VGA_REG_CTRL             0x3d4

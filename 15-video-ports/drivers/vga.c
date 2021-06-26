@@ -6,7 +6,7 @@
 
 static
 uint16_t vga_get_mem_offset(int col, int row) {
-    return ((row * VGA_TEXT_MODE_MAX_COLS) + col) * 2;
+    return ((row * VGA_TEXT_MODE_MAX_COLS) + col) * VGA_CHAR_CELL_NUM_BYTES;
 }
 
 static
@@ -22,12 +22,12 @@ uint16_t vga_get_cursor(void) {
     /* VGA hardware stores character offset.
      * Multiply by 2 to get character cell offset.
      */
-    return offset * 2;
+    return offset * VGA_CHAR_CELL_NUM_BYTES;
 }
 
 static
 void vga_set_cursor(uint16_t offset) {
-    offset /= 2;
+    offset /= VGA_CHAR_CELL_NUM_BYTES;
 
     port_byte_out(VGA_REG_CTRL, 0x0F);
     port_byte_out(VGA_REG_DATA, offset & 0xFF);
@@ -49,7 +49,7 @@ uint16_t vga_handle_scrolling(uint16_t offset) {
     for (int i = 1; i < VGA_TEXT_MODE_MAX_ROWS; i++) {
         memory_copy((uint8_t*) (vga_get_mem_offset(0, i-1) + VGA_START_ADDR),
                     (uint8_t*) (vga_get_mem_offset(0, i) + VGA_START_ADDR),
-                    VGA_TEXT_MODE_MAX_COLS*2);
+                    VGA_TEXT_MODE_MAX_COLS * VGA_CHAR_CELL_NUM_BYTES);
     }
 
     /* Blank last row */
@@ -79,7 +79,7 @@ void vga_print_char(uint8_t c, int col, int row, uint8_t attr) {
      * it will be advanced to the first col of the next row
      */
     if (c == '\n') {
-        int rows = offset / (VGA_TEXT_MODE_MAX_COLS*2);
+        int rows = offset / (VGA_TEXT_MODE_MAX_COLS * VGA_CHAR_CELL_NUM_BYTES);
         offset = vga_get_mem_offset(VGA_TEXT_MODE_MAX_COLS-1, rows);
     /* Else, write to video memory at calculated offset */
     } else {
@@ -88,7 +88,7 @@ void vga_print_char(uint8_t c, int col, int row, uint8_t attr) {
     }
 
     /* Update the offset to the next character cell */
-    offset += 2;
+    offset += VGA_CHAR_CELL_NUM_BYTES;
 
     /* Scroll if bottom of the screen reached */
     offset = vga_handle_scrolling(offset);
@@ -120,7 +120,7 @@ void vga_clear_row(int row) {
     for (int i = 0; i < VGA_TEXT_MODE_MAX_COLS; i++) {
         *vga_mem_ptr = 0;
         /* Skip attr byte, else cursor won't be visible */
-        vga_mem_ptr += 2;
+        vga_mem_ptr += VGA_CHAR_CELL_NUM_BYTES;
     }
 }
 
