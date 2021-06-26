@@ -75,11 +75,11 @@ void vga_print_char(uint8_t c, int col, int row, uint8_t attr) {
         offset = vga_get_cursor();
     }
 
-   /* If \n, set offset to end of current row, so that
-    * it will be advanced to the first col of the next row
-    */
+    /* If \n, set offset to end of current row, so that
+     * it will be advanced to the first col of the next row
+     */
     if (c == '\n') {
-        int rows = offset / (2*VGA_TEXT_MODE_MAX_COLS);
+        int rows = offset / (VGA_TEXT_MODE_MAX_COLS*2);
         offset = vga_get_mem_offset(VGA_TEXT_MODE_MAX_COLS-1, rows);
     /* Else, write to video memory at calculated offset */
     } else {
@@ -100,14 +100,19 @@ void vga_print_char(uint8_t c, int col, int row, uint8_t attr) {
 }
 
 void vga_print_str(uint8_t* str, int col, int row) {
+    /* Set new cursor pos, if not printing from current cursor */
     if (row >= 0 && col >= 0)
         vga_set_cursor(vga_get_mem_offset(col, row));
 
+    /* Print char by char, starting from new cursor pos */
     while (*str != 0) {
         vga_print_char(*str, -1, -1, 0);
         str++;
     }
 }
+
+/* TODO: Implement to allow for easier debugging */
+void vga_print_dec(int32_t dec);
 
 void vga_clear_row(int row) {
     uint8_t* vga_mem_ptr = (uint8_t*) (vga_get_mem_offset(0, row) + VGA_START_ADDR);
