@@ -110,8 +110,12 @@ void vga_print_str(uint8_t* str, int col, int row) {
 }
 
 void vga_clear_row(int row) {
-    for (int col = 0; col < VGA_TEXT_MODE_MAX_COLS; col++) {
-        vga_print_char(' ', col, row, VGA_COLOR_WHITE_ON_BLACK);
+    uint8_t* vga_mem_ptr = (uint8_t*) (vga_get_mem_offset(0, row) + VGA_START_ADDR);
+
+    for (int i = 0; i < VGA_TEXT_MODE_MAX_COLS; i++) {
+        *vga_mem_ptr = 0;
+        /* Skip attr byte, else cursor won't be visible */
+        vga_mem_ptr += 2;
     }
 }
 
