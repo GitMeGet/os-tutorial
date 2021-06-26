@@ -47,8 +47,8 @@ uint16_t vga_handle_scrolling(uint16_t offset) {
     /* TODO: handle scrolling back more than one row */
     /* Shift rows back by one */
     for (int i = 1; i < VGA_TEXT_MODE_MAX_ROWS; i++) {
-        memory_copy((uint8_t*) (vga_get_mem_offset(0, i) + VGA_START_ADDR),
-                    (uint8_t*) (vga_get_mem_offset(0, i-1) + VGA_START_ADDR),
+        memory_copy((uint8_t*) (vga_get_mem_offset(0, i-1) + VGA_START_ADDR),
+                    (uint8_t*) (vga_get_mem_offset(0, i) + VGA_START_ADDR),
                     VGA_TEXT_MODE_MAX_COLS*2);
     }
 
