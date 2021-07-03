@@ -43,5 +43,5 @@ void isr_install() {
 
 void isr_handler(registers_t r) {
     vga_print_str("received interrupt: ", -1, -1);
-    vga_print_char(r.int_no, -1, -1, 0);
+    vga_print_dec(r.int_no);
 }

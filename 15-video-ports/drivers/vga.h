@@ -21,6 +21,8 @@ void vga_print_char(uint8_t c, int col, int row, uint8_t attr);
  */
 void vga_print_str(uint8_t* str, int col, int row);
 
+void vga_print_dec(int32_t dec);
+
 void vga_clear_row(int row);
 
 void vga_clear_screen(void);

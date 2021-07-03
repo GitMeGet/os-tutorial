@@ -4,6 +4,8 @@
 
 #include <stdint.h>
 
+#define ASCII_ZERO_OFFSET 48
+
 static
 uint16_t vga_get_mem_offset(int col, int row) {
     return ((row * VGA_TEXT_MODE_MAX_COLS) + col) * VGA_CHAR_CELL_NUM_BYTES;
@@ -111,8 +113,21 @@ void vga_print_str(uint8_t* str, int col, int row) {
     }
 }
 
-/* TODO: Implement to allow for easier debugging */
-void vga_print_dec(int32_t dec);
+void vga_print_dec(int32_t dec) {
+    uint8_t base = 10;
+    uint8_t ascii_char;
+
+    if (dec < 0) {
+        vga_print_char('-', -1, -1, 0);
+        dec *= -1;
+    }
+
+    while (dec > 0) {
+        ascii_char = (dec % base) + ASCII_ZERO_OFFSET;
+        vga_print_char(ascii_char, -1, -1, 0);
+        dec -= base;
+    }
+}
 
 void vga_clear_row(int row) {
     uint8_t* vga_mem_ptr = (uint8_t*) (vga_get_mem_offset(0, row) + VGA_START_ADDR);
