@@ -33,4 +33,4 @@ typedef struct {
 void set_idt_gate(int n, uint32_t handler);
 void set_idt();
 
-#endif
+#endif /* IDT_H */

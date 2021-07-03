@@ -1,3 +1,6 @@
+#ifndef VGA_H
+#define VGA_H
+
 #include <stdint.h>
 
 #define VGA_START_ADDR           0xb8000
@@ -29,3 +32,5 @@ void vga_print_dec(int32_t dec);
 void vga_clear_row(int row);
 
 void vga_clear_screen(void);
+
+#endif /* VGA_H */
