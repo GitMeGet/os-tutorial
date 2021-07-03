@@ -113,6 +113,10 @@ void vga_print_str(uint8_t* str, int col, int row) {
     }
 }
 
+void vga_print(uint8_t* str) {
+    vga_print_str(str, -1, -1);
+}
+
 void vga_print_dec(int32_t dec) {
     uint8_t base = 10;
     uint8_t ascii_char;
