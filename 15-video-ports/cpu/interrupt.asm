@@ -1,8 +1,8 @@
 ; Defined in isr.c
-[extern isr_handler]
+[extern exception_handler]
 
 ; Common ISR code
-isr_common_stub:
+exception_common_stub:
     ; 1. Save CPU state
     pusha ; Pushes edi,esi,ebp,esp,ebx,edx,ecx,eax
     mov ax, ds ; Lower 16-bits of eax = ds.
@@ -13,7 +13,7 @@ isr_common_stub:
     mov fs, ax
     mov gs, ax
     ; 2. Call C handler
-    call isr_handler
+    call exception_handler
     ; 3. Restore state
     pop eax
     mov ds, ax
@@ -25,52 +25,52 @@ isr_common_stub:
     sti
     iret ; pops 5 things at once: CS, EIP, EFLAGS, SS, and ESP
 
-%macro ISR_NOERRCODE 1  ; define a macro, taking one parameter
-  [GLOBAL isr%1]        ; %1 accesses the first parameter.
-  isr%1:
+%macro EXCEPTION_NOERRCODE 1  ; define a macro, taking one parameter
+  [GLOBAL exception%1]        ; %1 accesses the first parameter.
+  exception%1:
     cli
     push byte 0
     push byte %1
-    jmp isr_common_stub
+    jmp exception_common_stub
 %endmacro
 
-%macro ISR_ERRCODE 1
-  [GLOBAL isr%1]
-  isr%1:
+%macro EXCEPTION_ERRCODE 1
+  [GLOBAL exception%1]
+  exception%1:
     cli
     push byte %1
-    jmp isr_common_stub
+    jmp exception_common_stub
 %endmacro
 
-ISR_NOERRCODE 0
-ISR_NOERRCODE 1
-ISR_NOERRCODE 2
-ISR_NOERRCODE 3
-ISR_NOERRCODE 4
-ISR_NOERRCODE 5
-ISR_NOERRCODE 6
-ISR_NOERRCODE 7
-ISR_ERRCODE 8
-ISR_NOERRCODE 9
-ISR_ERRCODE 10
-ISR_ERRCODE 11
-ISR_ERRCODE 12
-ISR_ERRCODE 13
-ISR_ERRCODE 14
-ISR_NOERRCODE 15
-ISR_NOERRCODE 16
-ISR_NOERRCODE 17
-ISR_NOERRCODE 18
-ISR_NOERRCODE 19
-ISR_NOERRCODE 20
-ISR_NOERRCODE 21
-ISR_NOERRCODE 22
-ISR_NOERRCODE 23
-ISR_NOERRCODE 24
-ISR_NOERRCODE 25
-ISR_NOERRCODE 26
-ISR_NOERRCODE 27
-ISR_NOERRCODE 28
-ISR_NOERRCODE 29
-ISR_NOERRCODE 30
-ISR_NOERRCODE 31
+EXCEPTION_NOERRCODE 0
+EXCEPTION_NOERRCODE 1
+EXCEPTION_NOERRCODE 2
+EXCEPTION_NOERRCODE 3
+EXCEPTION_NOERRCODE 4
+EXCEPTION_NOERRCODE 5
+EXCEPTION_NOERRCODE 6
+EXCEPTION_NOERRCODE 7
+EXCEPTION_ERRCODE 8
+EXCEPTION_NOERRCODE 9
+EXCEPTION_ERRCODE 10
+EXCEPTION_ERRCODE 11
+EXCEPTION_ERRCODE 12
+EXCEPTION_ERRCODE 13
+EXCEPTION_ERRCODE 14
+EXCEPTION_NOERRCODE 15
+EXCEPTION_NOERRCODE 16
+EXCEPTION_NOERRCODE 17
+EXCEPTION_NOERRCODE 18
+EXCEPTION_NOERRCODE 19
+EXCEPTION_NOERRCODE 20
+EXCEPTION_NOERRCODE 21
+EXCEPTION_NOERRCODE 22
+EXCEPTION_NOERRCODE 23
+EXCEPTION_NOERRCODE 24
+EXCEPTION_NOERRCODE 25
+EXCEPTION_NOERRCODE 26
+EXCEPTION_NOERRCODE 27
+EXCEPTION_NOERRCODE 28
+EXCEPTION_NOERRCODE 29
+EXCEPTION_NOERRCODE 30
+EXCEPTION_NOERRCODE 31
