@@ -8,5 +8,5 @@ void main() {
     vga_print("Another line of text...");
 
     isr_install();
-    asm volatile ("int $0x3");
+    asm volatile ("int $0x1E");
 }

@@ -5,6 +5,8 @@
 #include <stdint.h>
 
 #define ASCII_ZERO_OFFSET 48
+/* 2,147,483,647 -> 10 characters */
+#define INT32_MAX_DEC_CHAR 10
 
 static
 uint16_t vga_get_mem_offset(int col, int row) {
@@ -120,6 +122,8 @@ void vga_print(uint8_t* str) {
 void vga_print_dec(int32_t dec) {
     uint8_t base = 10;
     uint8_t ascii_char;
+    uint8_t arr[INT32_MAX_DEC_CHAR];
+    uint8_t idx = 0;
 
     if (dec < 0) {
         vga_print_char('-', -1, -1, 0);
@@ -128,8 +132,13 @@ void vga_print_dec(int32_t dec) {
 
     while (dec > 0) {
         ascii_char = (dec % base) + ASCII_ZERO_OFFSET;
+        arr[idx++] = ascii_char;
+        dec /= base;
+    }
+
+    while(idx > 0) {
+        ascii_char = arr[--idx];
         vga_print_char(ascii_char, -1, -1, 0);
-        dec -= base;
     }
 }
 
