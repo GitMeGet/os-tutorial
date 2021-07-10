@@ -1,5 +1,6 @@
 ; Defined in isr.c
 [extern exception_handler]
+[extern irq_handler]
 
 ; Common ISR code
 exception_common_stub:
@@ -25,6 +26,28 @@ exception_common_stub:
     sti
     iret ; pops 5 things at once: CS, EIP, EFLAGS, SS, and ESP
 
+irq_common_stub:
+    pusha
+    mov ax, ds
+    push eax
+    mov ax, 0x10
+    mov ds, ax
+    mov es, ax
+    mov fs, ax
+    mov gs, ax
+    ; 2. Call C handler
+    call irq_handler
+    ; 3. Restore state
+    pop ebx
+    mov ds, bx
+    mov es, bx
+    mov fs, bx
+    mov gs, bx
+    popa
+    add esp, 8
+    sti
+    iret
+
 %macro EXCEPTION_NOERRCODE 1  ; define a macro, taking one parameter
   [GLOBAL exception%1]        ; %1 accesses the first parameter.
   exception%1:
@@ -40,6 +63,15 @@ exception_common_stub:
     cli
     push byte %1
     jmp exception_common_stub
+%endmacro
+
+%macro IRQ 1
+  [GLOBAL irq%1]
+  irq%1:
+    cli
+    push byte %1
+    push byte %1 + 32
+    jmp irq_common_stub
 %endmacro
 
 EXCEPTION_NOERRCODE 0
@@ -74,3 +106,20 @@ EXCEPTION_NOERRCODE 28
 EXCEPTION_NOERRCODE 29
 EXCEPTION_NOERRCODE 30
 EXCEPTION_NOERRCODE 31
+
+IRQ                 0
+IRQ                 1
+IRQ                 2
+IRQ                 3
+IRQ                 4
+IRQ                 5
+IRQ                 6
+IRQ                 7
+IRQ                 8
+IRQ                 9
+IRQ                 10
+IRQ                 11
+IRQ                 12
+IRQ                 13
+IRQ                 14
+IRQ                 15

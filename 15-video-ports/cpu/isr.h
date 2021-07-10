@@ -37,6 +37,24 @@ extern void exception29();
 extern void exception30();
 extern void exception31();
 
+/* ISRs reserved for hardware interrupts */
+extern void irq0();
+extern void irq1();
+extern void irq2();
+extern void irq3();
+extern void irq4();
+extern void irq5();
+extern void irq6();
+extern void irq7();
+extern void irq8();
+extern void irq9();
+extern void irq10();
+extern void irq11();
+extern void irq12();
+extern void irq13();
+extern void irq14();
+extern void irq15();
+
 /* Struct which aggregates many registers */
 typedef struct {
    uint32_t ds; /* Data segment selector */
@@ -45,7 +63,11 @@ typedef struct {
    uint32_t eip, cs, eflags, useresp, ss; /* Pushed by the processor automatically */
 } registers_t;
 
-void isr_install();
+void isr_install(void);
+void remap_pic(uint8_t master_offset, uint8_t slave_offset);
 void exception_handler(registers_t r);
+
+typedef void (*isr_t)(registers_t); /* Function ptr isr_t */
+void irq_handler(registers_t r);
 
 #endif /* ISR_H */
