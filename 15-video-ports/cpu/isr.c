@@ -83,6 +83,10 @@ void exception_handler(registers_t r) {
     vga_print_dec(r.int_no);
 }
 
+void register_irq_handler(uint8_t n, isr_t handler) {
+    irq_handlers[n] = handler;
+}
+
 void irq_handler(registers_t r) {
     /* After every interrupt we need to send an EOI to the PICs
      * or they will not send another interrupt again */

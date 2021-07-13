@@ -68,6 +68,7 @@ void remap_pic(uint8_t master_offset, uint8_t slave_offset);
 void exception_handler(registers_t r);
 
 typedef void (*isr_t)(registers_t); /* Function ptr isr_t */
+void register_irq_handler(uint8_t n, isr_t handler);
 void irq_handler(registers_t r);
 
 #endif /* ISR_H */
