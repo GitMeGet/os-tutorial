@@ -55,20 +55,25 @@ extern void irq13();
 extern void irq14();
 extern void irq15();
 
-/* Struct which aggregates many registers */
+/* Describes function args */
 typedef struct {
-   uint32_t ds; /* Data segment selector */
-   uint32_t edi, esi, ebp, esp, ebx, edx, ecx, eax; /* Pushed by pusha. */
-   uint32_t int_no, err_code; /* Interrupt number and error code (if applicable) */
-   uint32_t eip, cs, eflags, useresp, ss; /* Pushed by the processor automatically */
+    /* Data segment selector */
+    uint32_t ds;
+    /* Pushed by pusha. */
+    uint32_t edi, esi, ebp, esp, ebx, edx, ecx, eax;
+    /* Interrupt number and error code (if applicable) */
+    uint32_t int_no, err_code;
+    /* Pushed by the processor automatically */
+    uint32_t eip, cs, eflags, useresp, ss;
 } registers_t;
 
 void isr_install(void);
 void remap_pic(uint8_t master_offset, uint8_t slave_offset);
 void exception_handler(registers_t r);
 
-typedef void (*isr_t)(registers_t); /* Function ptr isr_t */
+/* Function ptr isr_t, args: registers_t, return void */
+typedef void (*isr_t)(registers_t);
 void register_irq_handler(uint8_t n, isr_t handler);
-void irq_handler(registers_t r);
+void common_irq_handler(registers_t r);
 
 #endif /* ISR_H */

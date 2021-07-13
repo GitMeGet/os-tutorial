@@ -1,6 +1,6 @@
 ; Defined in isr.c
 [extern exception_handler]
-[extern irq_handler]
+[extern common_irq_handler]
 
 ; Common ISR code
 exception_common_stub:
@@ -36,7 +36,7 @@ irq_common_stub:
     mov fs, ax
     mov gs, ax
     ; 2. Call C handler
-    call irq_handler
+    call common_irq_handler
     ; 3. Restore state
     pop ebx
     mov ds, bx

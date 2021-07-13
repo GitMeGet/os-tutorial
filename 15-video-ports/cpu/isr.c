@@ -6,7 +6,7 @@
 #include <stddef.h>
 #include <stdint.h>
 
-isr_t interrupt_handlers[256];
+isr_t irq_handlers[256];
 
 void isr_install(void) {
     remap_pic(32, 40);
@@ -87,7 +87,7 @@ void register_irq_handler(uint8_t n, isr_t handler) {
     irq_handlers[n] = handler;
 }
 
-void irq_handler(registers_t r) {
+void common_irq_handler(registers_t r) {
     /* After every interrupt we need to send an EOI to the PICs
      * or they will not send another interrupt again */
     if (r.int_no >= 40)
@@ -96,8 +96,8 @@ void irq_handler(registers_t r) {
 
     /* TODO: handle spurious irq */
 
-    if (interrupt_handlers[r.int_no] != NULL) {
-        isr_t handler = interrupt_handlers[r.int_no];
+    if (irq_handlers[r.int_no] != NULL) {
+        isr_t handler = irq_handlers[r.int_no];
         handler(r);
     }
 }
