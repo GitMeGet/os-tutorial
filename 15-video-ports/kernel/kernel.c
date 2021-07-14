@@ -1,4 +1,5 @@
 #include "../cpu/isr.h"
+#include "../drivers/keyboard.h"
 #include "../drivers/ports.h"
 #include "../drivers/vga.h"
 
@@ -8,5 +9,7 @@ void main() {
     vga_print("Another line of text...");
 
     isr_install();
+    keyboard_init();
     asm volatile ("int $0x1E");
+    asm volatile ("sti");
 }
