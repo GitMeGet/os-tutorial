@@ -13,7 +13,7 @@
 #define VGA_REG_CTRL             0x3d4
 #define VGA_REG_DATA             0x3d5
 
-void vga_print_char(uint8_t c, int col, int row, uint8_t attr);
+void vga_print_char(char c, int col, int row, uint8_t attr);
 
 /* Prints a null-terminated string
  *
@@ -22,10 +22,10 @@ void vga_print_char(uint8_t c, int col, int row, uint8_t attr);
  *
  * @return void
  */
-void vga_print_str(uint8_t* str, int col, int row);
+void vga_print_str(const char* str, int col, int row);
 
 /* Calls vga_print_str() at current cursor */
-void vga_print(uint8_t* str);
+void vga_print(const char* str);
 
 void vga_print_dec(int32_t dec);
 

@@ -65,7 +65,7 @@ uint16_t vga_handle_scrolling(uint16_t offset) {
     return offset;
 }
 
-void vga_print_char(uint8_t c, int col, int row, uint8_t attr) {
+void vga_print_char(char c, int col, int row, uint8_t attr) {
     uint8_t* vid_mem = (uint8_t*) VGA_START_ADDR;
 
     if (!attr)
@@ -103,7 +103,7 @@ void vga_print_char(uint8_t c, int col, int row, uint8_t attr) {
     vga_set_cursor(offset);
 }
 
-void vga_print_str(uint8_t* str, int col, int row) {
+void vga_print_str(const char* str, int col, int row) {
     /* Set new cursor pos, if not printing from current cursor */
     if (row >= 0 && col >= 0)
         vga_set_cursor(vga_get_mem_offset(col, row));
@@ -115,7 +115,7 @@ void vga_print_str(uint8_t* str, int col, int row) {
     }
 }
 
-void vga_print(uint8_t* str) {
+void vga_print(const char* str) {
     vga_print_str(str, -1, -1);
 }
 
