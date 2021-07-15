@@ -4,7 +4,6 @@
 
 #include <stdint.h>
 
-#define ASCII_ZERO_OFFSET 48
 /* 2,147,483,647 -> 10 characters */
 #define INT32_MAX_DEC_CHAR 10
 
@@ -120,25 +119,13 @@ void vga_print(const char* str) {
 }
 
 void vga_print_dec(int32_t dec) {
-    uint8_t base = 10;
-    uint8_t ascii_char;
-    uint8_t arr[INT32_MAX_DEC_CHAR];
-    uint8_t idx = 0;
+    uint8_t str[INT32_MAX_DEC_CHAR];
+    uint8_t len;
 
-    if (dec < 0) {
-        vga_print_char('-', -1, -1, 0);
-        dec *= -1;
-    }
+    int_to_ascii(dec, str, &len);
 
-    while (dec > 0) {
-        ascii_char = (dec % base) + ASCII_ZERO_OFFSET;
-        arr[idx++] = ascii_char;
-        dec /= base;
-    }
-
-    while(idx > 0) {
-        ascii_char = arr[--idx];
-        vga_print_char(ascii_char, -1, -1, 0);
+    while(len > 0) {
+        vga_print_char(str[--len], -1, -1, 0);
     }
 }
 
