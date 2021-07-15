@@ -90,20 +90,18 @@ void vga_print_char(char c, int col, int row, uint8_t attr) {
         return;
     }
 
-    /* If \n, set offset to end of current row, so that
-     * it will be advanced to the first col of the next row
-     */
+    /* Handle newline */
     if (c == '\n') {
+        /* Set offset to start of next row */
         int rows = offset / (VGA_TEXT_MODE_MAX_COLS * VGA_CHAR_CELL_NUM_BYTES);
-        offset = vga_get_mem_offset(VGA_TEXT_MODE_MAX_COLS-1, rows);
-    /* Else, write to video memory at calculated offset */
+        offset = vga_get_mem_offset(0, rows+1);
+    /* Write character to video memory at calculated offset */
     } else {
         vid_mem[offset] = c;
         vid_mem[offset+1] = attr;
+        /* Update the offset to the next character cell */
+        offset += VGA_CHAR_CELL_NUM_BYTES;
     }
-
-    /* Update the offset to the next character cell */
-    offset += VGA_CHAR_CELL_NUM_BYTES;
 
     /* Scroll if bottom of the screen reached */
     offset = vga_handle_scrolling(offset);
