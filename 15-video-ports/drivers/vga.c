@@ -78,6 +78,18 @@ void vga_print_char(char c, int col, int row, uint8_t attr) {
         offset = vga_get_cursor();
     }
 
+    /* Handle backspace */
+    if (c == '\b') {
+        /* Go to previous character cell */
+        offset -= VGA_CHAR_CELL_NUM_BYTES;
+        /* Clear character byte */
+        vid_mem[offset] = 0;
+        /* Set attribute byte, so cursor is visible */
+        vid_mem[offset+1] = attr;
+        vga_set_cursor(offset);
+        return;
+    }
+
     /* If \n, set offset to end of current row, so that
      * it will be advanced to the first col of the next row
      */
