@@ -17,7 +17,7 @@ uint16_t vga_get_cursor(void) {
     uint16_t offset;
 
     port_byte_out(VGA_REG_CTRL, 0x0F);
-    offset |= port_byte_in(VGA_REG_DATA);
+    offset = port_byte_in(VGA_REG_DATA);
 
     port_byte_out(VGA_REG_CTRL, 0x0E);
     offset |= (port_byte_in(VGA_REG_DATA) << 8);
