@@ -42,7 +42,7 @@ void vga_set_cursor(uint16_t offset) {
 static
 uint16_t vga_handle_scrolling(uint16_t offset) {
     /* If the offset is within screen, don't modify */
-    if (offset < vga_get_mem_offset(VGA_TEXT_MODE_MAX_COLS-1,
+    if (offset < vga_get_mem_offset(VGA_TEXT_MODE_MAX_COLS,
                                     VGA_TEXT_MODE_MAX_ROWS-1)) {
         return offset;
     }
