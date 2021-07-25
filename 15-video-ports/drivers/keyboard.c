@@ -3,17 +3,17 @@
 #include "ports.h"
 #include "vga.h"
 
-char sc_to_ascii[56] = {
-'\0',   /* key detection error or internal buffer overrun */
-'\0',  /* escape */
+char sc_to_ascii[256] = {
+'\0',   /* 0x00: key detection error or internal buffer overrun */
+'\0',   /* 0x01: escape */
 /* 0x02 */
 '1', '2', '3', '4', '5', '6', '7', '8', '9', '0', '-', '=',
-'\b',   /* 0x0f: backspace */
-'\t',   /* tab */
+'\b',   /* 0x0e: backspace */
+'\t',   /* 0x0f: tab */
 /* 0x10 */
 'q', 'w', 'e', 'r', 't', 'y', 'u', 'i', 'o', 'p', '[', ']',
 '\n',   /* 0x1c: enter */
-'\0',   /* left ctrl */
+'\0',   /* 0x1d: left ctrl */
 /* 0x1e */
 'a', 's', 'd', 'f', 'g', 'h', 'j', 'k', 'l', ';', '\'', '`',
 '\0',   /* 0x2a: left shift */
@@ -21,6 +21,9 @@ char sc_to_ascii[56] = {
 /* 0x2c */
 'z', 'x', 'c', 'v', 'b', 'n', 'm', ',', '.', '/',
 '\0',   /* 0x36: right shift */
+'*',    /* 0x37: keypad * */
+'\0',   /* 0x38: left alt */
+' ',    /* 0x39: space */
 };
 
 
