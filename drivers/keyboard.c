@@ -49,7 +49,7 @@ void keyboard_irq_handler(registers_t regs) {
 }
 
 void keyboard_init(void) {
-    register_irq_handler(33, keyboard_irq_handler);
+    register_irq_handler(ISR_NUM_KEYBOARD, keyboard_irq_handler);
 }
 
 void keyboard_get_cmd(char* str, uint32_t* len) {

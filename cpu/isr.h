@@ -3,6 +3,9 @@
 
 #include <stdint.h>
 
+#define ISR_NUM_TIMER       32
+#define ISR_NUM_KEYBOARD    33
+
 /* ISRs reserved for CPU exceptions */
 extern void exception0();
 extern void exception1();

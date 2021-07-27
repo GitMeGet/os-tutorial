@@ -44,8 +44,8 @@ void isr_install(void) {
     set_idt_gate(30, (uint32_t)exception30);
     set_idt_gate(31, (uint32_t)exception31);
 
-    set_idt_gate(32, (uint32_t)irq0);
-    set_idt_gate(33, (uint32_t)irq1);
+    set_idt_gate(ISR_NUM_TIMER, (uint32_t)irq0);
+    set_idt_gate(ISR_NUM_KEYBOARD, (uint32_t)irq1);
     set_idt_gate(34, (uint32_t)irq2);
     set_idt_gate(35, (uint32_t)irq3);
     set_idt_gate(36, (uint32_t)irq4);
