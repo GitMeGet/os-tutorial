@@ -10,7 +10,7 @@ void handle_user_cmd(void) {
     uint32_t len = 0;
     int64_t timer_sec;
 
-    timer_sec = timer_get_elapsed();
+    timer_sec = timer_get_elapsed_ms();
     keyboard_get_cmd(cmdbuf, &len);
     if (len > 0) {
         cmdbuf[len] = '\0';
