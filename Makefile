@@ -9,6 +9,10 @@ GDB = /usr/local/i386elfgcc/bin/i386-elf-gdb
 # -g: Use debugging symbols in gcc
 CFLAGS = -g
 
+QEMU = /usr/bin/qemu-system-i386
+QEMU_RUN_FLAGS = -fda os-image.bin -device piix3-ide,id=ide -drive id=disk,file=image.img,format=raw,if=none -device ide-hd,drive=disk,bus=ide.0
+QEMU_DEBUG_FLAGS = -s -S
+
 # First rule is run by default
 os-image.bin: boot/bootsect.bin kernel.bin
 	cat $^ > os-image.bin
@@ -23,11 +27,11 @@ kernel.elf: boot/kernel_entry.o ${OBJ}
 	i386-elf-ld -o $@ -Ttext 0x1000 $^ 
 
 run: os-image.bin
-	qemu-system-i386 -fda os-image.bin
+	$(QEMU) $(QEMU_RUN_FLAGS)
 
 # Open the connection to qemu and load our kernel-object file with symbols
 debug: os-image.bin kernel.elf
-	qemu-system-i386 -s -S -fda os-image.bin &
+	$(QEMU) $(QEMU_RUN_FLAGS) $(QEMU_DEBUG_FLAGS) &
 	${GDB} -ex "target remote localhost:1234" -ex "symbol-file kernel.elf"
 
 # Generic rules for wildcards
