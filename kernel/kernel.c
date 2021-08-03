@@ -1,5 +1,6 @@
 #include "../cpu/isr.h"
 #include "../drivers/keyboard.h"
+#include "../drivers/ata.h"
 #include "../drivers/ports.h"
 #include "../drivers/timer.h"
 #include "../drivers/vga.h"
@@ -25,8 +26,11 @@ void main() {
     isr_install();
     timer_init();
     keyboard_init();
-    asm volatile ("int $0x1E");
     asm volatile ("sti");
+
+    if (ata_identify()) {
+        vga_print("ata_identify() failed\n");
+    }
 
     while(1) {
         handle_user_cmd();
