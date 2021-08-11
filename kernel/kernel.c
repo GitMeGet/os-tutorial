@@ -32,6 +32,14 @@ void main() {
         vga_print("ata_identify() failed\n");
     }
 
+    vga_print("start\n");
+    uint16_t dest[512];
+    ata_read_sectors(dest, 0, 1);
+    for (int i = 0; i < 10; i++) {
+        vga_print_dec(dest[i]);
+    }
+    vga_print("done\n");
+
     while(1) {
         handle_user_cmd();
     }
