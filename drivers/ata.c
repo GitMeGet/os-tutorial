@@ -55,7 +55,7 @@ int ata_identify(void) {
      * If so, the drive is not ATA, and you should stop polling. */
     if (port_byte_in(ATA_REG_LBA_MID_RW) != 0 ||
          port_byte_in(ATA_REG_LBA_HI_RW) != 0) {
-        return -1;
+        return -4;
     }
 
     /* poll Status port until bit 3 (DRQ, value = 8) sets,
@@ -69,6 +69,8 @@ int ata_identify(void) {
     }
 
     for (int i = 0; i < 256; i++) {
+        vga_print_dec(i);
+        vga_print(": ");
         vga_print_dec(port_word_in(ATA_REG_DATA_RW));
         vga_print("\n");
     }
