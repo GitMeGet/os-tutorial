@@ -31,5 +31,6 @@
 void timer_init(void);
 int64_t timer_get_elapsed_ms(void);
 int64_t timer_get_elapsed_s(void);
+void timer_sleep_ms(int64_t sleep_ms);
 
 #endif /* TIMER_H */

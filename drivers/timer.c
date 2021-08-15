@@ -34,3 +34,8 @@ int64_t timer_get_elapsed_s(void) {
 //    return timer_ms / 1000;
 }
 
+void timer_sleep_ms(int64_t sleep_ms) {
+    int64_t start_time = timer_ms;
+    while (timer_ms - start_time < sleep_ms);
+}
+

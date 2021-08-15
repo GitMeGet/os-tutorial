@@ -32,9 +32,9 @@
 #define ATA_REG_STATUS_DRQ      0x08
 #define ATA_REG_STATUS_ERR      0x01
 
-#define ATA_SECTOR_BYTES        256
+#define ATA_SECTOR_BYTES        512
 
 int ata_identify(void);
-void ata_read_sectors(uint16_t* dest, uint32_t LBA, uint8_t sector_count);
+int ata_read_sectors(uint16_t* dest, uint32_t LBA, uint8_t sector_count);
 
 #endif /* ATA_H */

@@ -35,8 +35,9 @@ void main() {
     vga_print("start\n");
     uint16_t dest[512];
     ata_read_sectors(dest, 0, 1);
-    for (int i = 0; i < 10; i++) {
+    for (int i = 0; i < 20; i++) {
         vga_print_dec(dest[i]);
+        vga_print("\n");
     }
     vga_print("done\n");
 
