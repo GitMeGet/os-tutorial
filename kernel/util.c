@@ -19,6 +19,10 @@ void int_to_ascii(int32_t dec, char str[], uint8_t* len) {
     uint8_t ascii_char;
     uint8_t idx = 0;
 
+    if (dec == 0) {
+        str[idx++] = '0';
+    }
+
     if (dec < 0) {
         str[idx++] = '-';
         dec *= -1;
