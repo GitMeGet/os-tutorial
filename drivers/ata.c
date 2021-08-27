@@ -18,6 +18,7 @@ void ata_wait_drq(void) {
     }
 }
 
+static
 int ata_poll(void) {
     /* wait for BSY flag to be set */
     timer_sleep_ms(5);
@@ -37,6 +38,8 @@ int ata_poll(void) {
 }
 
 int ata_identify(void) {
+    uint16_t data;
+
     port_byte_out(ATA_REG_DRIVE_RW, ATA_REG_DRIVE_MASTER);
     port_byte_out(ATA_REG_SECT_CNT_RW, 0);
     port_byte_out(ATA_REG_LBA_LO_RW, 0);
@@ -69,10 +72,8 @@ int ata_identify(void) {
     }
 
     for (int i = 0; i < 256; i++) {
-        vga_print_dec(i);
-        vga_print(": ");
-        vga_print_dec(port_word_in(ATA_REG_DATA_RW));
-        vga_print("\n");
+        data = port_word_in(ATA_REG_DATA_RW);
+        printf("%d: %d\n", i, data);
     }
 
     return 0;
@@ -110,6 +111,41 @@ int ata_read_sectors(uint16_t* dest, uint32_t LBA, uint8_t sector_count)
         }
 
         dest += ATA_SECTOR_BYTES;
+    }
+}
+
+int ata_write_sectors(uint16_t* src, uint32_t LBA, uint8_t sector_count)
+{
+    int ret_val;
+
+    ata_wait_not_bsy();
+
+    /* select drive */
+    port_byte_out(ATA_REG_DRIVE_RW, ATA_REG_DRIVE_MASTER |
+                                    ATA_REG_DRIVE_LBA_MODE |
+                                    ((LBA >> 24) & 0x0F));
+
+    /* disable interrupts after drive selected */
+    port_byte_out(ATA_REG_DEV_CTL_W, 2);
+
+    port_byte_out(ATA_REG_SECT_CNT_RW, sector_count);
+    port_byte_out(ATA_REG_LBA_LO_RW,  (uint8_t) LBA);
+    port_byte_out(ATA_REG_LBA_MID_RW, (uint8_t) (LBA >> 8));
+    port_byte_out(ATA_REG_LBA_HI_RW,  (uint8_t) (LBA >> 16));
+    port_byte_out(ATA_REG_CMD_W, ATA_REG_CMD_WRITE);
+
+    for (int i = 0; i < sector_count; i++) {
+
+        if (ret_val = ata_poll()) {
+            vga_print("ata_poll() err\n");
+            return ret_val;
+        }
+
+        for (int j = 0; j < ATA_SECTOR_BYTES; j++) {
+            port_word_out(ATA_REG_DATA_RW, src[j]);
+        }
+
+        src += ATA_SECTOR_BYTES;
     }
 }
 

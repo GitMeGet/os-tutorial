@@ -24,6 +24,8 @@
 #define ATA_REG_DRIVE_LBA_MODE  0x40
 
 #define ATA_REG_CMD_READ        0x20
+#define ATA_REG_CMD_WRITE       0x30
+#define ATA_REG_CMD_FLUSH_CACHE 0xE7
 #define ATA_REG_CMD_IDENTIFY    0xEC
 
 #define ATA_REG_STATUS_BSY      0x80
@@ -36,5 +38,6 @@
 
 int ata_identify(void);
 int ata_read_sectors(uint16_t* dest, uint32_t LBA, uint8_t sector_count);
+int ata_write_sectors(uint16_t* src, uint32_t LBA, uint8_t sector_count);
 
 #endif /* ATA_H */

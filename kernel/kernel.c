@@ -4,6 +4,7 @@
 #include "../drivers/ports.h"
 #include "../drivers/timer.h"
 #include "../drivers/vga.h"
+#include "util.h"
 
 char cmdbuf[KEYBUF_MAX];
 
@@ -22,24 +23,36 @@ void handle_user_cmd(void) {
     }
 }
 
-void main() {
-    isr_install();
-    timer_init();
-    keyboard_init();
-    asm volatile ("sti");
-
+void test_ata() {
     if (ata_identify()) {
         vga_print("ata_identify() failed\n");
     }
 
     vga_print("start\n");
     uint16_t dest[512];
+
     ata_read_sectors(dest, 0, 1);
-    for (int i = 0; i < 20; i++) {
-        vga_print_dec(dest[i]);
-        vga_print("\n");
+    for (int i = 0; i < 5; i++) {
+        printf("%d\n", dest[i]);
+    }
+
+    memory_set((uint8_t *) dest, 0, 512);
+    ata_write_sectors(dest, 0, 1);
+
+    ata_read_sectors(dest, 0, 1);
+    for (int i = 0; i < 5; i++) {
+        printf("%d\n", dest[i]);
     }
     vga_print("done\n");
+}
+
+void main() {
+    isr_install();
+    timer_init();
+    keyboard_init();
+    asm volatile ("sti");
+
+    test_ata();
 
     while(1) {
         handle_user_cmd();
