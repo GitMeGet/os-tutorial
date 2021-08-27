@@ -14,7 +14,7 @@ QEMU_RUN_FLAGS = -fda os-image.bin -device piix3-ide,id=ide -drive id=disk,file=
 QEMU_DEBUG_FLAGS = -s -S
 
 # First rule is run by default
-os-image.bin: boot/bootsect.bin kernel.bin
+os-image.bin: boot/boot_sector.bin kernel.bin
 	cat $^ > os-image.bin
 
 # '--oformat binary' deletes all symbols as a collateral, so we don't need

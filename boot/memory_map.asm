@@ -1,8 +1,6 @@
 ; use the INT 0x15, eax = 0xE820 BIOS function to get a memory map
-; inputs: es:di -> destination buffer for 24 byte entries
-; outputs: bp = entry count, trashes all registers except esi
 
-NUM_ENTRIES          equ 0x7E00 ; the number of entries will be stored at 0x8000
+NUM_ENTRIES          equ 0x7E00 ; addr to store of entries
 STRUCT_BASE          equ 0x7E04
 SMAP                 equ 0x0534D4150
 CMD_MMAP_GET         equ 0xe820
