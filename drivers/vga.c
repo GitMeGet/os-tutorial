@@ -2,6 +2,7 @@
 #include "../kernel/util.h"
 #include "vga.h"
 
+#include <stdarg.h>
 #include <stdint.h>
 
 /* 2,147,483,647 -> 10 characters */
@@ -137,6 +138,27 @@ void vga_print_dec(int32_t dec) {
     while(len > 0) {
         vga_print_char(str[--len], -1, -1, 0);
     }
+}
+
+int printf(const char* format, ...) {
+    va_list argp;
+    int dec;
+
+    va_start(argp, format);
+    while (*format != '\0') {
+        if (*format == '%') {
+            format++;
+            if (*format == 'd') {
+                dec = va_arg(argp, int);
+                vga_print_dec(dec);
+            }
+        } else {
+            vga_print_char(*format, -1, -1, 0);
+        }
+        format++;
+    }
+    va_end(argp);
+    return 0;
 }
 
 void vga_clear_row(int row) {

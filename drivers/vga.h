@@ -31,6 +31,8 @@ void vga_print(const char* str);
 
 void vga_print_dec(int32_t dec);
 
+int printf(const char* format, ...);
+
 void vga_clear_row(int row);
 
 void vga_clear_screen(void);
