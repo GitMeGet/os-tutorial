@@ -1,10 +1,12 @@
 ; Identical to lesson 13's boot sector, but the %included files have new paths
 [org 0x7c00]
 KERNEL_OFFSET equ 0x1000 ; The same one we used when linking the kernel
-
     mov [BOOT_DRIVE], dl ; Remember that the BIOS sets us the boot drive in 'dl' on boot
     mov bp, 0x9000
     mov sp, bp
+
+    call read_mmap
+    jc read_mmap_err
 
     mov bx, MSG_REAL_MODE 
     call print
@@ -22,6 +24,7 @@ KERNEL_OFFSET equ 0x1000 ; The same one we used when linking the kernel
 %include "boot/switch_pm.asm"
 
 [bits 16]
+%include "boot/memory_map.asm"
 load_kernel:
     mov bx, MSG_LOAD_KERNEL
     call print
@@ -40,11 +43,13 @@ BEGIN_PM:
     call KERNEL_OFFSET ; Give control to the kernel
     jmp $ ; Stay here when the kernel returns control to us (if ever)
 
+read_mmap_err:
+    halt
 
 BOOT_DRIVE db 0 ; It is a good idea to store it in memory because 'dl' may get overwritten
-MSG_REAL_MODE db "Started in 16-bit Real Mode", 0
-MSG_PROT_MODE db "Landed in 32-bit Protected Mode", 0
-MSG_LOAD_KERNEL db "Loading kernel into memory", 0
+MSG_REAL_MODE db "16-bit", 0
+MSG_PROT_MODE db "32-bit", 0
+MSG_LOAD_KERNEL db "LK", 0
 
 ; padding
 times 510 - ($-$$) db 0

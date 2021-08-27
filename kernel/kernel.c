@@ -46,13 +46,19 @@ void test_ata() {
     vga_print("done\n");
 }
 
+void read_mmap() {
+    char *p = (char *)0x7E00;
+    printf("%d\n", p[0]);
+}
+
 void main() {
     isr_install();
     timer_init();
     keyboard_init();
     asm volatile ("sti");
 
-    test_ata();
+//    test_ata();
+    read_mmap();
 
     while(1) {
         handle_user_cmd();
