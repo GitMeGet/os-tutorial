@@ -1,13 +1,14 @@
-C_SOURCES = $(wildcard kernel/*.c drivers/*.c cpu/*.c)
-HEADERS = $(wildcard kernel/*.h drivers/*.h cpu/*.h)
-# Nice syntax for file extension replacement
-OBJ = ${C_SOURCES:.c=.o cpu/interrupt.o}
+SRC_DIR = .
+INC_DIR = .
+
+SRC = $(shell find $(SRC_DIR) -name '*.c')
+OBJ = ${SRC:.c=.o cpu/interrupt.o} # file extension replacement
 
 # Change this if your cross-compiler is somewhere else
 CC = /usr/local/i386elfgcc/bin/i386-elf-gcc
 GDB = /usr/local/i386elfgcc/bin/i386-elf-gdb
-# -g: Use debugging symbols in gcc
-CFLAGS = -g
+
+CFLAGS = -g -I $(INC_DIR)
 
 QEMU = /usr/bin/qemu-system-i386
 QEMU_RUN_FLAGS = -fda os-image.bin -device piix3-ide,id=ide -drive id=disk,file=image.img,format=raw,if=none -device ide-hd,drive=disk,bus=ide.0
@@ -17,8 +18,8 @@ QEMU_DEBUG_FLAGS = -s -S
 os-image.bin: boot/boot_sector.bin kernel.bin
 	cat $^ > os-image.bin
 
-# '--oformat binary' deletes all symbols as a collateral, so we don't need
-# to 'strip' them manually on this case
+# '--oformat binary' deletes all symbols as a collateral
+# don't need to 'strip' them manually
 kernel.bin: boot/kernel_entry.o ${OBJ}
 	i386-elf-ld -o $@ -Ttext 0x1000 $^ --oformat binary
 
@@ -35,8 +36,7 @@ debug: os-image.bin kernel.elf
 	${GDB} -ex "target remote localhost:1234" -ex "symbol-file kernel.elf"
 
 # Generic rules for wildcards
-# To make an object, always compile from its .c
-%.o: %.c ${HEADERS}
+%.o: %.c
 	${CC} ${CFLAGS} -ffreestanding -c $< -o $@
 
 %.o: %.asm
@@ -46,5 +46,4 @@ debug: os-image.bin kernel.elf
 	nasm $< -f bin -o $@
 
 clean:
-	rm -rf *.bin *.dis *.o os-image.bin *.elf
-	rm -rf kernel/*.o boot/*.bin drivers/*.o boot/*.o cpu/*.o
+	rm -rf **/*.bin **/*.o **/*.elf os-image.bin

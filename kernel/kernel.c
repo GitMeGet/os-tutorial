@@ -1,10 +1,10 @@
-#include "../cpu/isr.h"
-#include "../drivers/keyboard.h"
-#include "../drivers/ata.h"
-#include "../drivers/ports.h"
-#include "../drivers/timer.h"
-#include "../drivers/vga.h"
-#include "util.h"
+#include "cpu/isr.h"
+#include "drivers/keyboard.h"
+#include "drivers/ata.h"
+#include "drivers/ports.h"
+#include "drivers/timer.h"
+#include "drivers/vga.h"
+#include "kernel/util.h"
 
 char cmdbuf[KEYBUF_MAX];
 

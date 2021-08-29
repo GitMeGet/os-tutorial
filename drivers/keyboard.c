@@ -1,8 +1,8 @@
-#include "../cpu/isr.h"
-#include "../kernel/util.h"
-#include "keyboard.h"
-#include "ports.h"
-#include "vga.h"
+#include "cpu/isr.h"
+#include "drivers/keyboard.h"
+#include "drivers/ports.h"
+#include "drivers/vga.h"
+#include "kernel/util.h"
 
 char sc_to_ascii[256] = {
 '\0',   /* 0x00: key detection error or internal buffer overrun */

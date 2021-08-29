@@ -1,6 +1,6 @@
-#include "ports.h"
-#include "../kernel/util.h"
-#include "vga.h"
+#include "drivers/ports.h"
+#include "drivers/vga.h"
+#include "kernel/util.h"
 
 #include <stdarg.h>
 #include <stdint.h>

@@ -1,7 +1,7 @@
-#include "isr.h"
-#include "idt.h"
-#include "../drivers/ports.h"
-#include "../drivers/vga.h"
+#include "cpu/isr.h"
+#include "cpu/idt.h"
+#include "drivers/ports.h"
+#include "drivers/vga.h"
 
 #include <stddef.h>
 #include <stdint.h>

@@ -1,6 +1,6 @@
-#include "../cpu/isr.h"
-#include "ports.h"
-#include "timer.h"
+#include "cpu/isr.h"
+#include "drivers/ports.h"
+#include "drivers/timer.h"
 #include <stdint.h>
 
 static int64_t timer_ms = 0;

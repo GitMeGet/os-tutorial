@@ -1,7 +1,7 @@
 #include "ata.h"
-#include "ports.h"
-#include "timer.h"
-#include "vga.h"
+#include "drivers/ports.h"
+#include "drivers/timer.h"
+#include "drivers/vga.h"
 
 static
 void ata_wait_not_bsy(void) {
